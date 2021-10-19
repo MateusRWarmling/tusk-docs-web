@@ -11,7 +11,7 @@ export function Header() {
       borderBottom="1px"
       borderColor="rgba(211, 211, 211, .4)"
     >
-      <Flex w="1120px" marginX="auto" justifyContent="flex-end">
+      <Flex w="1200px" marginX="auto" justifyContent="flex-end">
         <Flex
           width="400px"
           alignItems="center"
