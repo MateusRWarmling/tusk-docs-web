@@ -8,6 +8,7 @@ export function SideCircles() {
       direction="column"
       gridGap="10px"
       fontSize="26px"
+      top="46px"
       left="-10px"
       position="absolute"
     >
