@@ -1,5 +1,5 @@
 import { Box, Text, Flex } from "@chakra-ui/react";
-import { RegisterButton } from "../RegisterButton";
+import { RegisterButton } from "../../../components/RegisterButton";
 
 export function SectionInfo() {
   return (
