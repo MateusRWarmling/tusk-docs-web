@@ -1,8 +1,8 @@
-import { Box, Text, Image, Flex } from "@chakra-ui/react";
+import { Text, Image, Flex } from "@chakra-ui/react";
 
 export function SectionInfo() {
   return (
-    <Flex direction="column">
+    <Flex direction="column" paddingX={{ base: "1rem", xl: "0" }} maxW="35rem">
       <Text
         fontWeight="bold"
         fontSize="48px"
@@ -13,7 +13,7 @@ export function SectionInfo() {
         Baixe o app para
         <br /> escanear os boletos e<br /> facilitar o processo
       </Text>
-      <Image src="src\Assets\images\separator.png" mb="56px" />
+      <Image src="src\Assets\images\separator.png" mb="56px" maxW="100%" />
       <Text fontSize="24px" lineHeight="36px" fontFamily="Poppins">
         Utilizamos a câmera do seu celular e a<br /> inteligência artificial
         para ler os boletos. Dessa

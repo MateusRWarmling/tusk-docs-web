@@ -1,18 +1,19 @@
-import { Flex, Box, Button, Image, Text } from "@chakra-ui/react";
+import { Flex, Box, Image, Text } from "@chakra-ui/react";
 import { Nav } from "./Nav";
-import { RegisterButton } from "../RegisterButton";
+import { RegisterButton } from "../RegisterNowButton";
 
 export function Footer() {
   return (
     <Box>
       <Flex
-        w="1200px"
+        maxW="1200px"
         mx="auto"
         justifyContent="space-between"
         alignItems="center"
         mb="2.5rem"
+        direction={{ sm: "column", lg: "inherit" }}
       >
-        <Flex alignItems="center">
+        <Flex alignItems="center" mb="4rem">
           <Image src="src\Assets\images\elephant.png" maxH="136px" mr="45px" />
           <Nav />
         </Flex>

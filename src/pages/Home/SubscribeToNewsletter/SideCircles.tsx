@@ -11,6 +11,7 @@ export function SideCircles() {
       top="46px"
       left="-10px"
       position="absolute"
+      display={{ base: "none", md: "inherit" }}
     >
       <IoEllipse />
       <IoEllipse />

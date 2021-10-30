@@ -18,9 +18,23 @@ export function HomeSecondSection() {
         position="absolute"
         right="0"
         top="94px"
+        display={{ base: "none", xl: "inherit" }}
       />
-      <Flex w="1200px" marginX="auto" justifyContent="space-between">
-        <Image maxH="405px" src="src\Assets\images\dashboardDrawing.png" />
+
+      <Flex
+        maxW="1200px"
+        w="100%"
+        marginX="auto"
+        justifyContent="space-between"
+        direction={{ sm: "column", lg: "inherit" }}
+      >
+        <Image
+          maxH="405px"
+          maxW="572px"
+          paddingX={{ base: "1rem", xl: "0" }}
+          display={{ base: "none", lg: "inherit" }}
+          src="src\Assets\images\dashboardDrawing.png"
+        />
         <SectionInfo />
       </Flex>
     </Flex>

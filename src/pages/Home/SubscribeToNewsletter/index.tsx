@@ -14,7 +14,7 @@ export function SubscribeToNewsletter() {
       position="relative"
     >
       <SideCircles />
-      <Flex direction="column">
+      <Flex direction="column" padding="1rem">
         <SubscribeText />
         <SubscribeBox />
       </Flex>

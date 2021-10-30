@@ -12,7 +12,13 @@ import {
 
 export function SubscribeBox() {
   return (
-    <Box marginX="auto" backgroundColor="white" borderRadius="10px">
+    <Box
+      marginX="auto"
+      backgroundColor="white"
+      borderRadius="10px"
+      maxW="614px"
+      w="100%"
+    >
       <FormControl>
         <InputGroup>
           <InputLeftAddon
@@ -20,10 +26,11 @@ export function SubscribeBox() {
             backgroundColor="white"
             fontSize="24px"
             h="56px"
+            border="none"
           />
           <Input
             h="56px"
-            w="364px"
+            maxW="364px"
             variant="filled"
             bgColor="white"
             borderRightRadius="0"
@@ -31,10 +38,11 @@ export function SubscribeBox() {
             placeholder="Seu melhor email"
             fontSize="20px"
             _placeholder={{ color: "black", textAlign: "center" }}
-          ></Input>
+          />
           <Button
             h="56px"
-            w="198px"
+            maxW="198px"
+            w="100%"
             borderLeftRadius="0"
             backgroundColor="#2069AC"
             color="white"

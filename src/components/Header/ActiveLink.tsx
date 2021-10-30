@@ -19,16 +19,11 @@ export function ActiveLink({ title, href }: ActiveLinkProps) {
   const isActive = isLinkActive();
 
   return (
-    <>
-      {isActive ? (
-        <Box borderBottom="2px" _hover={{ textDecoration: "none" }}>
-          <Link to={href}>{title}</Link>
-        </Box>
-      ) : (
-        <Box _hover={{ textDecoration: "none" }}>
-          <Link to={href}>{title}</Link>
-        </Box>
-      )}
-    </>
+    <Box
+      borderBottom={isActive ? "2px" : ""}
+      _hover={{ textDecoration: "none" }}
+    >
+      <Link to={href}>{title}</Link>
+    </Box>
   );
 }
