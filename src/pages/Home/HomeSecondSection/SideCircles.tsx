@@ -10,6 +10,7 @@ export function SideCircles() {
       fontSize="26px"
       left="-10px"
       position="absolute"
+      display={{ sm: "none", lg: "inherit" }}
     >
       <IoEllipse />
       <IoEllipse />

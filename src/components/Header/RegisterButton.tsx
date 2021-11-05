@@ -1,21 +1,24 @@
-import { Box } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 export function RegisterButton() {
   return (
-    <Box
-      as="button"
-      backgroundColor="blue.850"
-      color="white"
-      fontWeight="bold"
-      paddingY="12px"
-      paddingX="2.1rem"
-      borderRadius="6px"
-      transition="0.2s"
-      _hover={{
-        filter: "brightness(0.7)",
-      }}
-    >
-      Cadastrar
-    </Box>
+    <Link to="/register">
+      <Button
+        as="a"
+        backgroundColor="blue.850"
+        color="white"
+        fontWeight="bold"
+        paddingY="23px"
+        paddingX="2.3rem"
+        borderRadius="6px"
+        transition="0.2s"
+        _hover={{
+          filter: "brightness(0.7)",
+        }}
+      >
+        Cadastrar
+      </Button>
+    </Link>
   );
 }

@@ -10,6 +10,7 @@ export function Header() {
       width="100%"
       borderBottom="1px"
       borderColor="rgba(211, 211, 211, .4)"
+      padding="1rem"
     >
       <Flex w="1200px" marginX="auto" justifyContent="flex-end">
         <Flex
