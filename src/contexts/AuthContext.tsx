@@ -23,12 +23,12 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
-const history = useHistory();
-
 export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
+  const history = useHistory();
+
   const isAuthenticated = !!user;
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
       });
 
-      history.push("/");
+      history.push("/dashboard");
     } catch (error) {
       console.log(error);
     }

@@ -1,4 +1,9 @@
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
+
+import { AuthContext } from "../../../contexts/AuthContext";
+
 import {
   Stack,
   FormLabel,
@@ -10,9 +15,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 import { FaEyeSlash } from "react-icons/fa";
-import { useState } from "react";
 
 type SignInFormData = {
   email: string;
@@ -21,10 +24,16 @@ type SignInFormData = {
 
 export function LoginForm() {
   const { register, handleSubmit } = useForm({});
-  const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
-    console.log(values);
-  };
+  const { signIn } = useContext(AuthContext);
   const [hide, setHide] = useState(true);
+
+  const handleSignIn: SubmitHandler<SignInFormData> = async ({
+    email,
+    password,
+  }) => {
+    await signIn({ email, password });
+  };
+
   const HandleHide = () => setHide(!hide);
 
   return (
