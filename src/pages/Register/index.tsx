@@ -1,8 +1,8 @@
 import { Flex, Image, Text } from "@chakra-ui/react";
-import { LoginForm } from "./LoginForm";
+import { RegisterForm } from "./RegisterForm";
 import { Link } from "react-router-dom";
 
-export function Login() {
+export function Register() {
   return (
     <Flex
       backgroundColor="blue.850"
@@ -12,7 +12,6 @@ export function Login() {
     >
       <Flex
         backgroundColor="white"
-        w="380px"
         borderRadius="10px"
         direction="column"
         alignItems="center"
@@ -27,14 +26,14 @@ export function Login() {
         >
           Tusk Docs
         </Text>
-        <LoginForm />
+        <RegisterForm />
         <Flex marginTop="2rem">
           <Text fontSize="0.9rem" color="#9FA2B4" marginRight="0.5rem">
-            Não tem uma conta ainda?
+            Já tem uma conta?
           </Text>
-          <Link to="/register">
+          <Link to="/login">
             <Text fontSize="0.9rem" color="blue.850">
-              Cadastrar
+              Entrar
             </Text>
           </Link>
         </Flex>

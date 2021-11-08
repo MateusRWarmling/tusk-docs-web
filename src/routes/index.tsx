@@ -6,6 +6,7 @@ import { Dashboard } from "../pages/Dashboard";
 import { Clients } from "../pages/Clients";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { Register } from "../pages/Register";
 
 export const Routes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -17,6 +18,10 @@ export const Routes = () => {
 
         <Route exact path="/login">
           {isAuthenticated ? <Redirect to="/dashboard" /> : <Login />}
+        </Route>
+
+        <Route exact path="/register">
+          {isAuthenticated ? <Redirect to="/dashboard" /> : <Register />}
         </Route>
 
         <Route exact path="/dashboard">
