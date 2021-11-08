@@ -8,7 +8,7 @@ import { Footer } from "../../components/Footer";
 
 export function Home() {
   return (
-    <Box>
+    <Box bgColor="gray.75">
       <Header />
       <HomeFirstSection />
       <HomeSecondSection />
