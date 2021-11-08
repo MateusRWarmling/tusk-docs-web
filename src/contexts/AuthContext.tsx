@@ -5,6 +5,7 @@ import { api } from "../services/api";
 
 type User = {
   email: string;
+  nickname: string;
 };
 
 type SignCredentials = {
@@ -38,10 +39,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api
         .get("/users/me")
         .then((response) => {
-          const { email } = response.data;
+          const { email, nickname } = response.data;
 
-          setUser({ email });
-          console.log(response.data);
+          setUser({ email, nickname });
         })
         .catch(() => {
           signOut();
@@ -62,9 +62,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setUser({
         email,
+        nickname: "",
       });
-
-      history.push("/dashboard");
     } catch (error) {
       console.log(error);
     }

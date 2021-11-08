@@ -27,11 +27,8 @@ export function LoginForm() {
   const { signIn } = useContext(AuthContext);
   const [hide, setHide] = useState(true);
 
-  const handleSignIn: SubmitHandler<SignInFormData> = async ({
-    email,
-    password,
-  }) => {
-    await signIn({ email, password });
+  const handleSignIn: SubmitHandler<SignInFormData> = ({ email, password }) => {
+    signIn({ email, password });
   };
 
   const HandleHide = () => setHide(!hide);
