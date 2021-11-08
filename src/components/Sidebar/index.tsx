@@ -1,12 +1,5 @@
-import { Flex, Avatar, Divider, Text } from "@chakra-ui/react";
-import {
-  FaChartPie,
-  FaLightbulb,
-  FaBook,
-  FaCog,
-  FaMedal,
-} from "react-icons/fa";
-import { ActiveLink } from "./ActiveLink";
+import { Flex, Avatar, Text } from "@chakra-ui/react";
+import { SidebarLinks } from "./SidebarLinks";
 
 export function Sidebar() {
   return (
@@ -26,16 +19,7 @@ export function Sidebar() {
         mt="4.3rem"
         mb="2rem"
       />
-      <ActiveLink href="/dashboard" title="Visão Geral" svg={<FaChartPie />} />
-      <ActiveLink href="/clients" title="Clientes" svg={<FaLightbulb />} />
-      <ActiveLink href="/documents" title="Documentos" svg={<FaBook />} />
-      <Divider borderColor="#0F3860" marginY="1rem" />
-      <ActiveLink
-        href="/configurations"
-        title="Configurações"
-        svg={<FaCog />}
-      />
-      <ActiveLink href="/subscription" title="Inscrição" svg={<FaMedal />} />
+      <SidebarLinks />
       <Text marginTop="auto" marginBottom="1rem" color="white">
         Tusk Docs © 2021
       </Text>
