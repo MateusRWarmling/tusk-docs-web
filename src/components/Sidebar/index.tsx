@@ -1,7 +1,11 @@
 import { Flex, Avatar, Text } from "@chakra-ui/react";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 import { SidebarLinks } from "./SidebarLinks";
 
 export function Sidebar() {
+  const { user } = useContext(AuthContext);
+
   return (
     <Flex
       backgroundColor="blue.850"
@@ -10,15 +14,10 @@ export function Sidebar() {
       w="100%"
       alignItems="center"
       direction="column"
+      position="sticky"
+      top="0"
     >
-      <Avatar
-        maxW="153px"
-        maxH="153px"
-        w="100%"
-        h="100%"
-        mt="4.3rem"
-        mb="2rem"
-      />
+      <Avatar name={user?.nickname} size="2xl" mt="4.3rem" mb="2rem" />
       <SidebarLinks />
       <Text marginTop="auto" marginBottom="1rem" color="white">
         Tusk Docs © 2021

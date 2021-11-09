@@ -11,7 +11,7 @@ export function PagesHeader({ title }: PagesHeaderProps) {
       <Text fontSize="1.5rem" fontWeight="bold">
         {title}
       </Text>
-      <UserInfo name="Jones Ferdinand" />
+      <UserInfo />
     </Flex>
   );
 }

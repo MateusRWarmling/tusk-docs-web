@@ -1,12 +1,13 @@
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
+import { Register } from "../pages/Register";
 import { Dashboard } from "../pages/Dashboard";
 import { Clients } from "../pages/Clients";
+import { Documents } from "../pages/Documents";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { Register } from "../pages/Register";
 
 export const Routes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -15,22 +16,32 @@ export const Routes = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route
+          exact
+          path="/login"
+          component={isAuthenticated ? Dashboard : Login}
+        />
+        <Route
+          exact
+          path="/register"
+          component={isAuthenticated ? Dashboard : Register}
+        />
 
-        <Route exact path="/login">
-          {isAuthenticated ? <Redirect to="/dashboard" /> : <Login />}
-        </Route>
-
-        <Route exact path="/register">
-          {isAuthenticated ? <Redirect to="/dashboard" /> : <Register />}
-        </Route>
-
-        <Route exact path="/dashboard">
-          {!isAuthenticated ? <Redirect to="/login" /> : <Dashboard />}
-        </Route>
-
-        <Route exact path="/clients">
-          {!isAuthenticated ? <Redirect to="/login" /> : <Clients />}
-        </Route>
+        <Route
+          exact
+          path="/dashboard"
+          component={isAuthenticated ? Dashboard : Login}
+        />
+        <Route
+          exact
+          path="/clients"
+          component={isAuthenticated ? Clients : Login}
+        />
+        <Route
+          exact
+          path="/documents"
+          component={isAuthenticated ? Documents : Login}
+        />
       </Switch>
     </BrowserRouter>
   );

@@ -7,17 +7,22 @@ import { Stack, Flex, Button } from "@chakra-ui/react";
 import { UserRegister } from "./UserRegister";
 import { CompanyRegister } from "./CompanyRegister";
 
-type SignInFormData = {
+type SignUpCredentials = {
   email: string;
+  nickname: string;
+  username: string;
   password: string;
+  legalName: string;
+  businessName: string;
+  registration: string;
 };
 
 export function RegisterForm() {
   const { register, handleSubmit } = useForm({});
-  const { signIn } = useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
 
-  const handleSignIn: SubmitHandler<SignInFormData> = ({ email, password }) => {
-    signIn({ email, password });
+  const handleSignIn: SubmitHandler<SignUpCredentials> = (data) => {
+    signUp(data);
   };
 
   return (

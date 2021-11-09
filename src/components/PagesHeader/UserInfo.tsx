@@ -1,16 +1,16 @@
 import { Flex, Text, Avatar } from "@chakra-ui/react";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
-interface UserInfoProps {
-  name: string;
-}
+export function UserInfo() {
+  const { user } = useContext(AuthContext);
 
-export function UserInfo({ name }: UserInfoProps) {
   return (
     <Flex alignItems="center">
       <Text fontWeight="semibold" marginRight="12px">
-        {name}
+        {user?.nickname}
       </Text>
-      <Avatar size="sm" />
+      <Avatar size="sm" name={user?.nickname} />
     </Flex>
   );
 }

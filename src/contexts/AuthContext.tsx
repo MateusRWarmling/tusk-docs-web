@@ -8,6 +8,15 @@ type User = {
   nickname: string;
 };
 
+type SignUpCredentials = {
+  email: string;
+  nickname: string;
+  password: string;
+  legalName: string;
+  businessName: string;
+  registration: string;
+};
+
 type SignCredentials = {
   email: string;
   password: string;
@@ -15,6 +24,7 @@ type SignCredentials = {
 
 type AuthContextData = {
   signIn: (credentials: SignCredentials) => Promise<void>;
+  signUp: (credentials: SignUpCredentials) => Promise<void>;
   signOut: () => void;
   user: User | undefined;
   isAuthenticated: boolean;
@@ -56,14 +66,41 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       });
 
-      const { token } = data;
+      const { token, user } = data;
 
       localStorage.setItem("@tuskdocs/token", token);
 
       setUser({
         email,
-        nickname: "",
+        nickname: user.nickname,
       });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function signUp({
+    email,
+    nickname,
+    password,
+    legalName,
+    businessName,
+    registration,
+  }: SignUpCredentials) {
+    try {
+      await api.post("users", {
+        email,
+        nickname,
+        username: email,
+        password,
+        company: {
+          legalName,
+          businessName,
+          registration,
+        },
+      });
+
+      signIn({ email, password });
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +113,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, isAuthenticated, user, signOut }}>
+    <AuthContext.Provider
+      value={{ signIn, isAuthenticated, user, signOut, signUp }}
+    >
       {children}
     </AuthContext.Provider>
   );
