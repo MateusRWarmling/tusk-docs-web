@@ -1,6 +1,7 @@
 import { SectionInfo } from "./SectionInfo";
 import { Flex, Image } from "@chakra-ui/react";
 import { SideCircles } from "./SideCircles";
+import triangle from "../../../Assets/images/triangle.png";
 
 export function HomeSecondSection() {
   return (
@@ -14,7 +15,7 @@ export function HomeSecondSection() {
       <SideCircles />
       <Image
         maxH="405px"
-        src="/src/Assets/images/triangle.png"
+        src={triangle}
         position="absolute"
         right="0"
         top="94px"

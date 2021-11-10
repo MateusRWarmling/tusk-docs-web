@@ -1,6 +1,7 @@
 import { Flex, Box, Image, Text } from "@chakra-ui/react";
 import { Nav } from "./Nav";
 import { RegisterButton } from "../RegisterNowButton";
+import elephant from "../../Assets/images/elephant.png";
 
 export function Footer() {
   return (
@@ -15,7 +16,7 @@ export function Footer() {
         gridGap="4rem"
       >
         <Flex alignItems="center">
-          <Image src="/src/Assets/images/elephant.png" maxH="136px" mr="45px" />
+          <Image src={elephant} maxH="136px" mr="45px" />
           <Nav />
         </Flex>
         <RegisterButton />
