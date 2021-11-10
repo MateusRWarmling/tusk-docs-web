@@ -16,13 +16,13 @@ export function Header() {
         <Flex
           width="400px"
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="flex-end"
+          gridGap="2rem"
           fontFamily="poppins"
           fontWeight="semibold"
           color="blue.850"
         >
           <ActiveLink title="Home" href="/" />
-          <ActiveLink title="Sobre" href="/about" />
           <ActiveLink title="Login" href="/login" />
           <RegisterButton />
         </Flex>

@@ -12,8 +12,9 @@ export function Footer() {
         alignItems="center"
         mb="2.5rem"
         direction={{ sm: "column", lg: "inherit" }}
+        gridGap="4rem"
       >
-        <Flex alignItems="center" mb="4rem">
+        <Flex alignItems="center">
           <Image src="src\Assets\images\elephant.png" maxH="136px" mr="45px" />
           <Nav />
         </Flex>

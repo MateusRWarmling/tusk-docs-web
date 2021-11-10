@@ -57,11 +57,6 @@ export function LoginForm() {
           <FormLabel fontSize="0.75rem" fontWeight="bold" color="#9FA2B4">
             SENHA
           </FormLabel>
-          <Link to="#">
-            <Box as="span" fontSize="0.7rem" color="#9FA2B4">
-              Esqueceu a senha?
-            </Box>
-          </Link>
         </Flex>
         <InputGroup>
           <Input
