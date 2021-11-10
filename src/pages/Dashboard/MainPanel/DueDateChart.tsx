@@ -5,7 +5,7 @@ import { useDashboard } from "../../../hooks/useDashboard";
 export function DueDateChart() {
   const { data } = useDashboard();
   const inTimeDocuments = data?.dashboard
-    ? data?.dashboard.documents - data?.dashboard.overdueDocuments
+    ? data?.dashboard.unpaidDocuments - data?.dashboard.overdueDocuments
     : 0;
   const options = {
     labels: ["Vencidos", "No Prazo"],
