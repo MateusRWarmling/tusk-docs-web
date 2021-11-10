@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -38,17 +39,19 @@ export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
-  const history = useHistory();
 
   const isAuthenticated = !!user;
 
   useEffect(() => {
     const token = localStorage.getItem("@tuskdocs/token");
 
+    console.log(token);
+
     if (token) {
       api
         .get("/users/me")
         .then((response) => {
+          console.log(response);
           const { email, nickname } = response.data;
 
           setUser({ email, nickname });
@@ -69,6 +72,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { token, user } = data;
 
       localStorage.setItem("@tuskdocs/token", token);
+
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       setUser({
         email,
@@ -108,8 +113,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function signOut() {
     localStorage.setItem("@tuskdocs/token", "");
-
-    history.push("/");
   }
 
   return (
