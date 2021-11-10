@@ -2,10 +2,10 @@ import { Flex, Text } from "@chakra-ui/react";
 
 interface DocumentDataBoxProps {
   title: string;
-  number: string;
+  number: number | undefined;
 }
 
-export function DocumentDataBox({ title, number }: DocumentDataBoxProps) {
+export function DocumentDataBox({ title, number = 0 }: DocumentDataBoxProps) {
   return (
     <Flex
       backgroundColor="gray.75"

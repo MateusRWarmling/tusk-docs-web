@@ -7,7 +7,8 @@ export function Dashboard() {
   return (
     <Flex>
       <Sidebar />
-      <Box padding="2rem" width="100%">
+
+      <Box padding="2rem" width="100%" marginTop={{ base: "2rem", lg: "0" }}>
         <PagesHeader title="Visão Geral" />
         <Flex
           w="100%"
