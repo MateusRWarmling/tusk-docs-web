@@ -3,14 +3,9 @@ import {
   FormLabel,
   CircularProgress,
   CircularProgressLabel,
-  Icon,
-  Image,
   Text,
   FormControl,
-  FormErrorMessage,
   Flex,
-  useToast,
-  Tooltip,
 } from "@chakra-ui/react";
 import axios, { CancelTokenSource } from "axios";
 import {
@@ -85,6 +80,8 @@ const FileInputBase: ForwardRefRenderFunction<
       const formData = new FormData();
 
       formData.append(e.target.name, e.target.files[0]);
+
+      setImageUrl(e.target.files[0]);
 
       const { CancelToken } = axios;
       const source = CancelToken.source();
@@ -213,7 +210,6 @@ const FileInputBase: ForwardRefRenderFunction<
 
         <canvas
           ref={previewCanvasRef}
-          // Rounding is important so the canvas width and height matches/is a multiple for sharpness.
           style={{
             width: Math.round(completedCrop?.width ?? 0),
             height: Math.round(completedCrop?.height ?? 0),
