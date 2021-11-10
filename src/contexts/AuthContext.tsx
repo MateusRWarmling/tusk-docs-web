@@ -45,13 +45,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const token = localStorage.getItem("@tuskdocs/token");
 
-    console.log(token);
-
     if (token) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
       api
         .get("/users/me")
         .then((response) => {
-          console.log(response);
           const { email, nickname } = response.data;
 
           setUser({ email, nickname });

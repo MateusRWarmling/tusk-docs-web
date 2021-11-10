@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
@@ -16,16 +16,12 @@ export const Routes = () => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route
-          exact
-          path="/login"
-          component={isAuthenticated ? Dashboard : Login}
-        />
-        <Route
-          exact
-          path="/register"
-          component={isAuthenticated ? Dashboard : Register}
-        />
+        <Route exact path="/login">
+          {!isAuthenticated ? <Login /> : <Redirect to={"/dashboard"} />}
+        </Route>
+        <Route exact path="/register">
+          {!isAuthenticated ? <Register /> : <Redirect to={"/dashboard"} />}
+        </Route>
 
         <Route
           exact
