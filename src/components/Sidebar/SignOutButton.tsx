@@ -22,7 +22,7 @@ export function SignOutButton() {
       alignItems="center"
       color="#A4A6B3"
     >
-      <Box as="button">
+      <Box as="button" onClick={() => handleSignOut()}>
         <Flex alignItems="center">
           <FaSignOutAlt />
           <Text marginLeft="1.5rem">Sair</Text>
