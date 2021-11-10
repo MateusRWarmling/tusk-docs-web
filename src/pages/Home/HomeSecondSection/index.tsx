@@ -2,6 +2,7 @@ import { SectionInfo } from "./SectionInfo";
 import { Flex, Image } from "@chakra-ui/react";
 import { SideCircles } from "./SideCircles";
 import triangle from "../../../Assets/images/triangle.png";
+import dashboardDrawing from "../../../Assets/images/dashboardDrawing.png";
 
 export function HomeSecondSection() {
   return (
@@ -34,7 +35,7 @@ export function HomeSecondSection() {
           maxW="572px"
           paddingX={{ base: "1rem", xl: "0" }}
           display={{ base: "none", lg: "inherit" }}
-          src="/src/Assets/images/dashboardDrawing.png"
+          src={dashboardDrawing}
         />
         <SectionInfo />
       </Flex>
