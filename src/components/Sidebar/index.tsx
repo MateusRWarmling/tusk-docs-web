@@ -1,27 +1,37 @@
-import { Flex, Avatar, Text } from "@chakra-ui/react";
-import { useContext } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
-import { SidebarLinks } from "./SidebarLinks";
+import {
+  Button,
+  Drawer,
+  useBreakpointValue,
+  DrawerOverlay,
+  DrawerContent,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { SidebarComponent } from "./SidebarComponent";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 export function Sidebar() {
-  const { user } = useContext(AuthContext);
+  const isDrawerSidebar = useBreakpointValue({
+    base: true,
+    lg: false,
+  });
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  return (
-    <Flex
-      backgroundColor="blue.850"
-      h="100vh"
-      maxW="16rem"
-      w="100%"
-      alignItems="center"
-      direction="column"
-      position="sticky"
-      top="0"
-    >
-      <Avatar name={user?.nickname} size="2xl" mt="4.3rem" mb="2rem" />
-      <SidebarLinks />
-      <Text marginTop="auto" marginBottom="1rem" color="white">
-        Tusk Docs © 2021
-      </Text>
-    </Flex>
-  );
+  if (isDrawerSidebar) {
+    return (
+      <>
+        <Button onClick={onOpen} position="absolute" top="4" left="4">
+          <GiHamburgerMenu />
+        </Button>
+        <Drawer isOpen={isOpen} placement="left" onClose={onClose} size="xs">
+          <DrawerOverlay>
+            <DrawerContent>
+              <SidebarComponent />
+            </DrawerContent>
+          </DrawerOverlay>
+        </Drawer>
+      </>
+    );
+  }
+
+  return <SidebarComponent />;
 }

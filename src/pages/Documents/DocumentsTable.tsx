@@ -133,7 +133,7 @@ export function DocumentsTable() {
             mt="24px"
             onClick={() => onOpen()}
           >
-            Novo documento
+            Novo boleto
           </Button>
 
           <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
@@ -145,7 +145,7 @@ export function DocumentsTable() {
             >
               <DrawerContent>
                 <DrawerHeader borderBottomWidth="1px">
-                  Cadastrar novo documento
+                  Cadastrar novo boleto
                 </DrawerHeader>
 
                 <DrawerBody>
@@ -162,14 +162,14 @@ export function DocumentsTable() {
                           fontWeight="bold"
                           color="#9FA2B4"
                         >
-                          NOVO DOCUMENTO
+                          NOVO BOLETO
                         </FormLabel>
 
                         <InputGroup>
                           <Input
                             type="text"
                             {...register("title")}
-                            placeholder="Titulo do documento"
+                            placeholder="Titulo do boleto"
                             isRequired
                           />
                         </InputGroup>
@@ -251,11 +251,11 @@ export function DocumentsTable() {
           </Flex>
         ) : error ? (
           <Flex>
-            <Text>Sem Documentos no momento</Text>
+            <Text>Sem boletos no momento</Text>
           </Flex>
         ) : (
           <>
-            <Table>
+            <Table overflowX="auto">
               <Thead borderBottom="4px solid #DFE0EB">
                 <Tr>
                   <Th px={["4", "4", "6"]} color="gray.300" width="8"></Th>

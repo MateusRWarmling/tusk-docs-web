@@ -2,7 +2,6 @@ import {
   Text,
   Box,
   Flex,
-  Heading,
   Button,
   Icon,
   Table,
@@ -30,7 +29,7 @@ export function ClientTable() {
 
   const isWideVersion = useBreakpointValue({
     base: false,
-    lg: true,
+    md: true,
   });
 
   type ClientData = {
@@ -119,13 +118,15 @@ export function ClientTable() {
           </Flex>
         ) : (
           <>
-            <Table>
+            <Table width="90%">
               <Thead borderBottom="4px solid #DFE0EB">
                 <Tr>
-                  <Th px={["4", "4", "6"]} color="gray.300" width="8"></Th>
+                  {isWideVersion && (
+                    <Th px={["4", "4", "6"]} color="gray.300" width="8"></Th>
+                  )}
                   <Th>Usuário</Th>
                   <Th>Descrição</Th>
-                  {isWideVersion && <Th>Data de cadastro</Th>}
+                  <Th>Data de cadastro</Th>
                   <Th width="8"></Th>
                 </Tr>
               </Thead>
@@ -137,16 +138,18 @@ export function ClientTable() {
                       verticalAlign="middle"
                       borderBottom="2px solid #DFE0EB"
                     >
-                      <Td>
-                        <Avatar name={client.name} size="lg" />
-                      </Td>
+                      {isWideVersion && (
+                        <Td>
+                          <Avatar name={client.name} size="lg" />
+                        </Td>
+                      )}
                       <Td>
                         <Text fontWeight="bold">{client.name}</Text>
                       </Td>
                       <Td>
                         <Text fontSize="sm">{client.description}</Text>
                       </Td>
-                      {isWideVersion && <Td>{client.createdAt}</Td>}
+                      <Td>{client.createdAt}</Td>
                     </Tr>
                   );
                 })}

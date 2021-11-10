@@ -5,7 +5,6 @@ import { AuthContext } from "../../../contexts/AuthContext";
 
 import { Stack, Flex, Button } from "@chakra-ui/react";
 import { UserRegister } from "./UserRegister";
-import { CompanyRegister } from "./CompanyRegister";
 
 type SignUpCredentials = {
   email: string;
@@ -29,7 +28,6 @@ export function RegisterForm() {
     <Stack as="form" spacing="24px" onSubmit={handleSubmit(handleSignIn)}>
       <Flex gridGap="24px" flexWrap="wrap" justifyContent="center">
         <UserRegister register={register} />
-        <CompanyRegister register={register} />
       </Flex>
 
       <Button
