@@ -12,7 +12,7 @@ import {
   useToast,
   Tooltip,
 } from "@chakra-ui/react";
-import axios, { AxiosRequestConfig, CancelTokenSource } from "axios";
+import axios, { CancelTokenSource } from "axios";
 import {
   useState,
   SetStateAction,
@@ -21,6 +21,7 @@ import {
   forwardRef,
   useCallback,
   useEffect,
+  useRef,
 } from "react";
 import {
   FieldError,
@@ -28,9 +29,6 @@ import {
   UseFormSetError,
   UseFormTrigger,
 } from "react-hook-form";
-import { FiAlertCircle, FiPlus } from "react-icons/fi";
-import { api } from "../../services/api";
-import Quagga from "@ericblade/quagga2";
 
 export interface FileInputProps {
   name: string;
@@ -43,7 +41,12 @@ export interface FileInputProps {
     event: React.ChangeEvent<HTMLInputElement>
   ) => Promise<boolean | void>;
   trigger: UseFormTrigger<FieldValues>;
+  completedCrop: any;
+  setCompletedCrop: Dispatch<SetStateAction<any>>;
 }
+
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 const FileInputBase: ForwardRefRenderFunction<
   HTMLInputElement,
@@ -58,160 +61,165 @@ const FileInputBase: ForwardRefRenderFunction<
     setError,
     onChange,
     trigger,
+    completedCrop,
+    setCompletedCrop,
     ...rest
   },
   ref
 ) => {
-  const toast = useToast();
   const [progress, setProgress] = useState(0);
   const [isSending, setIsSending] = useState(false);
-  const [cancelToken, setCancelToken] = useState<CancelTokenSource>(
+  const [, setCancelToken] = useState<CancelTokenSource>(
     {} as CancelTokenSource
   );
+  const previewCanvasRef = useRef<any>(null);
+  const [crop, setCrop] = useState<any>({ unit: "%", width: 30 });
+  const [upImg, setUpImg] = useState<any>();
+  const imgRef = useRef<any>(null);
 
-  const handleImageUpload = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
-      if (!event.target.files?.length) {
-        return;
-      }
-
-      setImageUrl("");
-      setLocalImageUrl("");
-      setIsSending(true);
-
-      await onChange(event);
+  const onSelectFile = async (e: any) => {
+    if (e.target.files && e.target.files.length > 0) {
+      await onChange(e);
       trigger("image");
 
       const formData = new FormData();
 
-      formData.append(event.target.name, event.target.files[0]);
+      formData.append(e.target.name, e.target.files[0]);
 
       const { CancelToken } = axios;
       const source = CancelToken.source();
       setCancelToken(source);
 
-      const config = {
-        headers: { "content-type": "multipart/form-data" },
-        onUploadProgress: (e: ProgressEvent) => {
-          setProgress(Math.round((e.loaded * 100) / e.total));
-        },
-        cancelToken: source.token,
-      } as AxiosRequestConfig;
+      const reader = new FileReader() as any;
+      reader.addEventListener("load", () => setUpImg(reader.result));
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
 
-      try {
-        // Testar lib aqui
+  const onLoad = useCallback((img) => {
+    imgRef.current = img;
+  }, []);
 
-        console.log(event.target.files[0]);
+  useEffect(() => {
+    if (!completedCrop || !previewCanvasRef.current || !imgRef.current) {
+      return;
+    }
 
-        setLocalImageUrl(URL.createObjectURL(event.target.files[0]));
-      } catch (error: any) {
-        if (error?.message === "Cancelled image upload.") return;
+    const image = imgRef.current;
+    const canvas = previewCanvasRef.current;
+    const crop = completedCrop;
 
-        toast({
-          title: "Falha no envio",
-          description: "Ocorreu um erro ao realizar o upload da sua imagem.",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-      } finally {
-        setIsSending(false);
-        setProgress(0);
-      }
-    },
-    [onChange, setError, setLocalImageUrl, trigger, toast]
-  );
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    const ctx = canvas.getContext("2d");
+    const pixelRatio = window.devicePixelRatio;
+
+    canvas.width = crop.width * pixelRatio * scaleX;
+    canvas.height = crop.height * pixelRatio * scaleY;
+
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    ctx.imageSmoothingQuality = "high";
+
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width * scaleX,
+      crop.height * scaleY
+    );
+
+    if (completedCrop && canvas && canvas.width > 0 && canvas.height > 0) {
+      const dataURL = canvas.toDataURL();
+
+      setLocalImageUrl(dataURL);
+    }
+  }, [completedCrop]);
 
   return (
     <FormControl isInvalid={!!error}>
       <FormLabel
         mx="auto"
-        w={64}
-        h={64}
+        w="full"
+        h="32px"
+        marginBottom="16px"
         htmlFor={name}
         cursor={isSending ? "progress" : "pointer"}
         opacity={isSending ? 0.5 : 1}
       >
-        {localImageUrl && !isSending ? (
-          <Image
-            w="full"
-            h="full"
-            src={localImageUrl}
-            alt="Uploaded photo"
-            borderRadius="md"
-            objectFit="cover"
-          />
-        ) : (
-          <Flex
-            w="full"
-            h="full"
-            flexDir="column"
-            justifyContent="center"
-            alignItems="center"
-            borderRadius="md"
-            bgColor="pGray.800"
-            color="pGray.200"
-            borderWidth={error?.message && 2}
-            borderColor={error?.message && "red.500"}
-          >
-            {isSending ? (
-              <>
-                <CircularProgress
-                  trackColor="pGray.200"
-                  value={progress}
-                  color="orange.500"
-                >
-                  <CircularProgressLabel>{progress}%</CircularProgressLabel>
-                </CircularProgress>
-                <Text as="span" pt={2} textAlign="center">
-                  Enviando...
+        <Flex
+          w="90%"
+          mx="auto"
+          h="34px"
+          flexDir="column"
+          justifyContent="center"
+          alignItems="center"
+          borderRadius="md"
+          bgColor="pGray.800"
+          color="pGray.200"
+          border="2px dashed"
+          borderWidth={error?.message && 2}
+          borderColor={error?.message && "red.500"}
+        >
+          {isSending ? (
+            <>
+              <CircularProgress
+                trackColor="pGray.200"
+                value={progress}
+                color="orange.500"
+              >
+                <CircularProgressLabel>{progress}%</CircularProgressLabel>
+              </CircularProgress>
+              <Text as="span" pt={2} textAlign="center">
+                Enviando...
+              </Text>
+            </>
+          ) : (
+            <Box pos="relative" h="14px">
+              <Flex h="14px" alignItems="center" justifyContent="center">
+                <Text as="span" textAlign="center">
+                  Adicione sua imagem e selecione o código de barras
                 </Text>
-              </>
-            ) : (
-              <Box pos="relative" h="full">
-                {!!error && (
-                  <Tooltip label={error.message} bg="red.500">
-                    <FormErrorMessage
-                      pos="absolute"
-                      right={2}
-                      top={2}
-                      mt={0}
-                      zIndex="tooltip"
-                    >
-                      <Icon as={FiAlertCircle} color="red.500" w={4} h={4} />
-                    </FormErrorMessage>
-                  </Tooltip>
-                )}
-
-                <Flex
-                  h="full"
-                  alignItems="center"
-                  justifyContent="center"
-                  flexDir="column"
-                >
-                  <Icon as={FiPlus} w={14} h={14} />
-                  <Text as="span" pt={2} textAlign="center">
-                    Adicione sua imagem
-                  </Text>
-                </Flex>
-              </Box>
-            )}
-          </Flex>
-        )}
-        <input
-          data-testid={name}
-          disabled={isSending}
-          id={name}
-          name={name}
-          onChange={handleImageUpload}
-          ref={ref}
-          type="file"
-          style={{
-            display: "none",
-          }}
-          {...rest}
-        />
+              </Flex>
+            </Box>
+          )}
+          <input
+            data-testid={name}
+            disabled={isSending}
+            id={name}
+            name={name}
+            onChange={onSelectFile}
+            ref={ref}
+            type="file"
+            style={{
+              display: "none",
+            }}
+            {...rest}
+          />
+        </Flex>
       </FormLabel>
+
+      <Box w={"90%"} mx="auto">
+        <ReactCrop
+          src={upImg}
+          onImageLoaded={onLoad}
+          crop={crop}
+          onChange={(c) => setCrop(c)}
+          onComplete={(c) => setCompletedCrop(c)}
+        />
+
+        <canvas
+          ref={previewCanvasRef}
+          // Rounding is important so the canvas width and height matches/is a multiple for sharpness.
+          style={{
+            width: Math.round(completedCrop?.width ?? 0),
+            height: Math.round(completedCrop?.height ?? 0),
+          }}
+        />
+      </Box>
     </FormControl>
   );
 };

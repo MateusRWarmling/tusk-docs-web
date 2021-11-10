@@ -4,7 +4,6 @@ import {
   Flex,
   Stack,
   Button,
-  Icon,
   Table,
   Thead,
   Th,
@@ -22,27 +21,29 @@ import {
   Drawer,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
   DrawerFooter,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { RiAddLine } from "react-icons/ri";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDocuments } from "../../hooks/useDocuments";
 import { useClients } from "../../hooks/useClients";
-import { api } from "../../services/api";
 import { FileInput } from "../../components/FileInput";
 import { useState } from "react";
+import { BrowserMultiFormatReader } from "@zxing/library";
+import { getDataFromCode } from "../../utils/getDataFromCode";
 
 export function DocumentsTable() {
   const { register, handleSubmit, reset, setError, trigger } = useForm({});
   const { data, isLoading, error, refetch } = useDocuments();
   const { data: clientData } = useClients();
-  const [imageUrl, setImageUrl] = useState("");
-  const [localImageUrl, setLocalImageUrl] = useState("");
+  const [, setImageUrl] = useState("");
+  const [localImageUrl, setLocalImageUrl] = useState<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [completedCrop, setCompletedCrop] = useState<any>(null);
+  const toast = useToast();
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -60,7 +61,6 @@ export function DocumentsTable() {
     title,
     description,
     clientId,
-    file,
   }) => {
     // await api.post("documents", {
     //   title,
@@ -69,15 +69,24 @@ export function DocumentsTable() {
     //   file,
     // });
 
-    console.log({
-      title,
-      description,
-      clientId,
-      file,
-    });
+    try {
+      const codeReader = new BrowserMultiFormatReader();
 
-    refetch();
-    reset();
+      const resultImage = await codeReader.decodeFromImageUrl(localImageUrl);
+      const imageText = resultImage.getText();
+
+      getDataFromCode(imageText);
+
+      refetch();
+      reset();
+    } catch (error) {
+      toast({
+        title: "Falha ao selecionar o código de barras",
+        position: "top",
+        status: "error",
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -98,104 +107,108 @@ export function DocumentsTable() {
             Novo documento
           </Button>
 
-          <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+          <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
             <DrawerOverlay />
-            <DrawerContent>
-              <DrawerHeader borderBottomWidth="1px">
-                Cadastrar novo documento
-              </DrawerHeader>
+            <Box as="form" onSubmit={handleSubmit(handleCreateClient)}>
+              <DrawerContent>
+                <DrawerHeader borderBottomWidth="1px">
+                  Cadastrar novo documento
+                </DrawerHeader>
 
-              <DrawerBody>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  gridGap="18px"
-                  w="100%"
-                  as="form"
-                  onSubmit={handleSubmit(handleCreateClient)}
-                >
-                  <Stack gridGap="18px" w="100%">
-                    <FormControl id="title">
-                      <FormLabel
-                        fontSize="0.75rem"
-                        fontWeight="bold"
-                        color="#9FA2B4"
-                      >
-                        NOVO DOCUMENTO
-                      </FormLabel>
-
-                      <InputGroup>
-                        <Input
-                          type="text"
-                          {...register("title")}
-                          placeholder="Titulo do documento"
-                          isRequired
-                        />
-                      </InputGroup>
-                    </FormControl>
-
-                    <FormControl id="description">
-                      <FormLabel
-                        fontSize="0.75rem"
-                        fontWeight="bold"
-                        color="#9FA2B4"
-                      >
-                        Descrição
-                      </FormLabel>
-
-                      <InputGroup>
-                        <Input
-                          type="text"
-                          {...register("description")}
-                          placeholder="Mais informações"
-                          isRequired
-                        />
-                      </InputGroup>
-                    </FormControl>
-
-                    <FormControl id="clientId">
-                      <FormLabel
-                        fontSize="0.75rem"
-                        fontWeight="bold"
-                        color="#9FA2B4"
-                      >
-                        CLIENTE
-                      </FormLabel>
-
-                      <InputGroup marginBottom="24px">
-                        <Select
-                          isRequired
-                          {...register("clientId")}
-                          placeholder="Selecione o cliente"
+                <DrawerBody>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gridGap="18px"
+                    w="100%"
+                  >
+                    <Stack gridGap="18px" w="100%">
+                      <FormControl id="title">
+                        <FormLabel
+                          fontSize="0.75rem"
+                          fontWeight="bold"
+                          color="#9FA2B4"
                         >
-                          {clientData?.clients.map((client) => (
-                            <option key={client.id} value={client.id}>
-                              {client.name}
-                            </option>
-                          ))}
-                        </Select>
-                      </InputGroup>
+                          NOVO DOCUMENTO
+                        </FormLabel>
 
-                      <FileInput
-                        setImageUrl={setImageUrl}
-                        localImageUrl={localImageUrl}
-                        setLocalImageUrl={setLocalImageUrl}
-                        setError={setError}
-                        trigger={trigger}
-                        {...register("image")}
-                      />
-                    </FormControl>
-                  </Stack>
-                </Box>
-              </DrawerBody>
+                        <InputGroup>
+                          <Input
+                            type="text"
+                            {...register("title")}
+                            placeholder="Titulo do documento"
+                            isRequired
+                          />
+                        </InputGroup>
+                      </FormControl>
 
-              <DrawerFooter borderTopWidth="1px">
-                <Button variant="outline" mr="auto" onClick={onClose}>
-                  Cancelar
-                </Button>
-                <Button colorScheme="blue">Cadastrar</Button>
-              </DrawerFooter>
-            </DrawerContent>
+                      <FormControl id="description">
+                        <FormLabel
+                          fontSize="0.75rem"
+                          fontWeight="bold"
+                          color="#9FA2B4"
+                        >
+                          Descrição
+                        </FormLabel>
+
+                        <InputGroup>
+                          <Input
+                            type="text"
+                            {...register("description")}
+                            placeholder="Mais informações"
+                            isRequired
+                          />
+                        </InputGroup>
+                      </FormControl>
+
+                      <FormControl id="clientId">
+                        <FormLabel
+                          fontSize="0.75rem"
+                          fontWeight="bold"
+                          color="#9FA2B4"
+                        >
+                          CLIENTE
+                        </FormLabel>
+
+                        <InputGroup marginBottom="24px">
+                          <Select
+                            isRequired
+                            {...register("clientId")}
+                            placeholder="Selecione o cliente"
+                          >
+                            {clientData?.clients.map((client) => (
+                              <option key={client.id} value={client.id}>
+                                {client.name}
+                              </option>
+                            ))}
+                          </Select>
+                        </InputGroup>
+
+                        <FileInput
+                          setImageUrl={setImageUrl}
+                          localImageUrl={localImageUrl}
+                          setLocalImageUrl={setLocalImageUrl}
+                          setError={setError}
+                          trigger={trigger}
+                          completedCrop={completedCrop}
+                          setCompletedCrop={setCompletedCrop}
+                          {...register("image")}
+                        />
+                      </FormControl>
+                    </Stack>
+                  </Box>
+                </DrawerBody>
+
+                <DrawerFooter borderTopWidth="1px">
+                  <Button variant="outline" mr="auto" onClick={onClose}>
+                    Cancelar
+                  </Button>
+                  <Button type="submit" colorScheme="blue">
+                    Cadastrar
+                  </Button>
+                </DrawerFooter>
+              </DrawerContent>
+            </Box>
           </Drawer>
         </Flex>
 
