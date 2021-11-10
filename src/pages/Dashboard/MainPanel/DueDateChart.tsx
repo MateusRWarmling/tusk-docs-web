@@ -1,53 +1,29 @@
-import { Flex, theme } from "@chakra-ui/react";
-import Chart from "react-apexcharts";
+import { Text, Box } from "@chakra-ui/react";
 import { useDashboard } from "../../../hooks/useDashboard";
+import { Pie } from "react-chartjs-2";
 
 export function DueDateChart() {
   const { data } = useDashboard();
   const inTimeDocuments = data?.dashboard
     ? data?.dashboard.unpaidDocuments - data?.dashboard.overdueDocuments
     : 0;
-  const options = {
-    labels: ["Vencidos", "No Prazo"],
-    colors: ["#E65F5C", "#022e57"],
-    title: {
-      text: "Situação de Vencimento",
-      align: "center",
-      margin: 40,
-      offsetX: 0,
-      offsetY: 0,
-      floating: false,
-      style: {
-        fontSize: "18px",
-        fontWeight: "bold",
-        fontFamily: undefined,
-        color: "#263238",
+
+  const chartData = {
+    labels: ["Vencidos", "No prazo"],
+    datasets: [
+      {
+        data: [data?.dashboard.overdueDocuments, inTimeDocuments],
+        backgroundColor: ["#E65F5C", "#022e57"],
       },
-    },
-    legend: {
-      position: "bottom",
-      fontSize: "16px",
-      markers: {
-        width: 16,
-        height: 16,
-        radius: 0,
-        offsetX: -5,
-      },
-      itemMargin: {
-        horizontal: 16,
-        vertical: 0,
-      },
-    },
-  } as ApexCharts.ApexOptions;
-  const series = [data?.dashboard.overdueDocuments, inTimeDocuments];
+    ],
+  };
 
   return (
-    <Chart
-      options={options}
-      series={series}
-      type="pie"
-      width="400px"
-      height="600px"
-    />
+    <Box width="500px">
+      <Text textAlign="center" fontSize="24px" fontWeight="bold" mb="1rem">
+        Prazos
+      </Text>
+      <Pie data={chartData} />
+    </Box>
   );
 }

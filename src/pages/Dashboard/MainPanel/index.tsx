@@ -7,7 +7,7 @@ export function MainPanel() {
     <Flex
       maxW="1100px"
       marginX="auto"
-      gridColumnGap="15rem"
+      gridColumnGap="4rem"
       gridRowGap="5rem"
       justifyContent="center"
       flexWrap="wrap"
