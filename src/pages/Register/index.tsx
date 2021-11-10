@@ -1,6 +1,7 @@
 import { Flex, Image, Text } from "@chakra-ui/react";
 import { RegisterForm } from "./RegisterForm";
 import { Link } from "react-router-dom";
+import elephant from "../../Assets/images/elephant.png";
 
 export function Register() {
   return (
@@ -17,7 +18,7 @@ export function Register() {
         alignItems="center"
         padding="24px"
       >
-        <Image src="src\Assets\images\elephant.png" maxH="76px" maxW="76px" />
+        <Image src={elephant} maxH="76px" maxW="76px" />
         <Text
           fontSize="19px"
           fontWeight="bold"
