@@ -38,7 +38,7 @@ export function DueDateChart() {
         vertical: 0,
       },
     },
-  };
+  } as ApexCharts.ApexOptions;
   const series = [data?.dashboard.overdueDocuments, inTimeDocuments];
 
   return (

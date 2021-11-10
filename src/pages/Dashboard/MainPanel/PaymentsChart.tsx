@@ -38,7 +38,7 @@ export function PaymentsChart() {
         vertical: 0,
       },
     },
-  };
+  } as ApexCharts.ApexOptions;
   const series = [data?.dashboard.unpaidDocuments, paidDocuments];
 
   return (
