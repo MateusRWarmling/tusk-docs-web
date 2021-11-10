@@ -26,20 +26,22 @@ import {
   DrawerFooter,
   useDisclosure,
   useToast,
+  Checkbox,
 } from "@chakra-ui/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDocuments } from "../../hooks/useDocuments";
 import { useClients } from "../../hooks/useClients";
 import { FileInput } from "../../components/FileInput";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/library";
 import { getDataFromCode } from "../../utils/getDataFromCode";
+import { api } from "../../services/api";
 
 export function DocumentsTable() {
   const { register, handleSubmit, reset, setError, trigger } = useForm({});
   const { data, isLoading, error, refetch } = useDocuments();
   const { data: clientData } = useClients();
-  const [, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [localImageUrl, setLocalImageUrl] = useState<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [completedCrop, setCompletedCrop] = useState<any>(null);
@@ -62,26 +64,53 @@ export function DocumentsTable() {
     description,
     clientId,
   }) => {
-    // await api.post("documents", {
-    //   title,
-    //   description,
-    //   clientId,
-    //   file,
-    // });
-
     try {
       const codeReader = new BrowserMultiFormatReader();
 
       const resultImage = await codeReader.decodeFromImageUrl(localImageUrl);
       const imageText = resultImage.getText();
 
-      getDataFromCode(imageText);
+      const { dueDate, value } = getDataFromCode(imageText);
+
+      var formData = new FormData();
+      formData.append("file", imageUrl);
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("clientId", clientId);
+      formData.append("dueDate", dueDate.toISOString());
+      formData.append("value", String(value));
+
+      await api.post("documents", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       refetch();
       reset();
+      onClose();
     } catch (error) {
       toast({
         title: "Falha ao selecionar o código de barras",
+        position: "top",
+        status: "error",
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleStatusChange = async (event: any) => {
+    try {
+      const { id } = event.target;
+
+      await api.patch(`documents/${id}`, {
+        paid: event.target.checked,
+      });
+
+      refetch();
+    } catch (error) {
+      toast({
+        title: "Falha ao atualizar status",
         position: "top",
         status: "error",
         isClosable: true,
@@ -109,7 +138,11 @@ export function DocumentsTable() {
 
           <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
             <DrawerOverlay />
-            <Box as="form" onSubmit={handleSubmit(handleCreateClient)}>
+            <Box
+              as="form"
+              onSubmit={handleSubmit(handleCreateClient)}
+              encType="multipart/form-data"
+            >
               <DrawerContent>
                 <DrawerHeader borderBottomWidth="1px">
                   Cadastrar novo documento
@@ -226,10 +259,12 @@ export function DocumentsTable() {
               <Thead borderBottom="4px solid #DFE0EB">
                 <Tr>
                   <Th px={["4", "4", "6"]} color="gray.300" width="8"></Th>
-                  <Th>Usuário</Th>
+                  <Th>Título</Th>
+                  <Th>Cliente</Th>
                   <Th>Descrição</Th>
-                  {isWideVersion && <Th>Data de cadastro</Th>}
-                  <Th width="8"></Th>
+                  <Th>Valor</Th>
+                  <Th>Status</Th>
+                  {isWideVersion && <Th>Data de vencimento</Th>}
                 </Tr>
               </Thead>
               <Tbody>
@@ -241,15 +276,37 @@ export function DocumentsTable() {
                       borderBottom="2px solid #DFE0EB"
                     >
                       <Td>
-                        <Avatar name={document.name} size="lg" />
+                        <Avatar
+                          name={document.fileUrl}
+                          src={document.fileUrl}
+                          size="lg"
+                        />
                       </Td>
                       <Td>
-                        <Text fontWeight="bold">{document.name}</Text>
+                        <Text fontWeight="bold">{document.title}</Text>
+                      </Td>
+                      <Td>
+                        <Text fontSize="sm">{document.owner}</Text>
                       </Td>
                       <Td>
                         <Text fontSize="sm">{document.description}</Text>
                       </Td>
-                      {isWideVersion && <Td>{document.createdAt}</Td>}
+                      <Td>
+                        <Text fontWeight="bold">{document.value}</Text>
+                      </Td>
+                      <Td>
+                        <Checkbox
+                          size="lg"
+                          colorScheme="green"
+                          defaultChecked={document.paid}
+                          mx="auto"
+                          id={document.id}
+                          onChange={(e) => handleStatusChange(e)}
+                        >
+                          {document.paid ? "Pago" : "Não pago"}
+                        </Checkbox>
+                      </Td>
+                      {isWideVersion && <Td>{document.dueDate}</Td>}
                     </Tr>
                   );
                 })}
