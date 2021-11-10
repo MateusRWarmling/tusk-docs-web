@@ -36,12 +36,14 @@ import { FormEvent, useState } from "react";
 import { BrowserMultiFormatReader } from "@zxing/library";
 import { getDataFromCode } from "../../utils/getDataFromCode";
 import { api } from "../../services/api";
+import { ViewImage } from "./ViewImage";
 
 export function DocumentsTable() {
   const { register, handleSubmit, reset, setError, trigger } = useForm({});
   const { data, isLoading, error, refetch } = useDocuments();
   const { data: clientData } = useClients();
   const [imageUrl, setImageUrl] = useState("");
+  const [openedModal, setOpenedModal] = useState(false);
   const [localImageUrl, setLocalImageUrl] = useState<any>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [completedCrop, setCompletedCrop] = useState<any>(null);
@@ -270,44 +272,52 @@ export function DocumentsTable() {
               <Tbody>
                 {data?.documents.map((document) => {
                   return (
-                    <Tr
-                      key={document.id}
-                      verticalAlign="middle"
-                      borderBottom="2px solid #DFE0EB"
-                    >
-                      <Td>
-                        <Avatar
-                          name={document.fileUrl}
-                          src={document.fileUrl}
-                          size="lg"
-                        />
-                      </Td>
-                      <Td>
-                        <Text fontWeight="bold">{document.title}</Text>
-                      </Td>
-                      <Td>
-                        <Text fontSize="sm">{document.owner}</Text>
-                      </Td>
-                      <Td>
-                        <Text fontSize="sm">{document.description}</Text>
-                      </Td>
-                      <Td>
-                        <Text fontWeight="bold">{document.value}</Text>
-                      </Td>
-                      <Td>
-                        <Checkbox
-                          size="lg"
-                          colorScheme="green"
-                          defaultChecked={document.paid}
-                          mx="auto"
-                          id={document.id}
-                          onChange={(e) => handleStatusChange(e)}
-                        >
-                          {document.paid ? "Pago" : "Não pago"}
-                        </Checkbox>
-                      </Td>
-                      {isWideVersion && <Td>{document.dueDate}</Td>}
-                    </Tr>
+                    <>
+                      <Tr
+                        key={document.id}
+                        verticalAlign="middle"
+                        borderBottom="2px solid #DFE0EB"
+                      >
+                        <Td>
+                          <Avatar
+                            name={document.fileUrl}
+                            src={document.fileUrl}
+                            size="lg"
+                            onClick={() => setOpenedModal(!openedModal)}
+                          />
+                        </Td>
+                        <Td>
+                          <Text fontWeight="bold">{document.title}</Text>
+                        </Td>
+                        <Td>
+                          <Text fontSize="sm">{document.owner}</Text>
+                        </Td>
+                        <Td>
+                          <Text fontSize="sm">{document.description}</Text>
+                        </Td>
+                        <Td>
+                          <Text fontWeight="bold">{document.value}</Text>
+                        </Td>
+                        <Td>
+                          <Checkbox
+                            size="lg"
+                            colorScheme="green"
+                            defaultChecked={document.paid}
+                            mx="auto"
+                            id={document.id}
+                            onChange={(e) => handleStatusChange(e)}
+                          >
+                            {document.paid ? "Pago" : "Não pago"}
+                          </Checkbox>
+                        </Td>
+                        {isWideVersion && <Td>{document.dueDate}</Td>}
+                      </Tr>
+                      <ViewImage
+                        imgUrl={document.fileUrl}
+                        openedModal={openedModal}
+                        setOpenedModal={setOpenedModal}
+                      />
+                    </>
                   );
                 })}
               </Tbody>
