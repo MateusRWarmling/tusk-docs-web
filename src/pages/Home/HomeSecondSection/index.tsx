@@ -14,7 +14,7 @@ export function HomeSecondSection() {
       <SideCircles />
       <Image
         maxH="405px"
-        src="src\Assets\images\triangle.png"
+        src="/src/Assets/images/triangle.png"
         position="absolute"
         right="0"
         top="94px"
@@ -33,7 +33,7 @@ export function HomeSecondSection() {
           maxW="572px"
           paddingX={{ base: "1rem", xl: "0" }}
           display={{ base: "none", lg: "inherit" }}
-          src="src\Assets\images\dashboardDrawing.png"
+          src="/src/Assets/images/dashboardDrawing.png"
         />
         <SectionInfo />
       </Flex>

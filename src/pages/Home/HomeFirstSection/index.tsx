@@ -13,7 +13,7 @@ export function HomeFirstSection() {
     >
       <SectionInfo />
       <Image
-        src="src\Assets\images\notebookImage.png"
+        src="/src/Assets/images/notebookImage.png"
         display={{ base: "none", lg: "inherit" }}
         maxH="462px"
         maxW="568px"

@@ -15,7 +15,7 @@ export function Footer() {
         gridGap="4rem"
       >
         <Flex alignItems="center">
-          <Image src="src\Assets\images\elephant.png" maxH="136px" mr="45px" />
+          <Image src="/src/Assets/images/elephant.png" maxH="136px" mr="45px" />
           <Nav />
         </Flex>
         <RegisterButton />
