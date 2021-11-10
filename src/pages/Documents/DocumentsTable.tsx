@@ -294,6 +294,7 @@ export function DocumentsTable() {
                                 setOpenedModal(!openedModal);
                                 setImageUrl(document.fileUrl);
                               }}
+                              cursor="pointer"
                             />
                           </Td>
                           <Td>
