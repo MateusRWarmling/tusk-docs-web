@@ -1,5 +1,6 @@
 import { Flex, Image } from "@chakra-ui/react";
 import { SectionInfo } from "./SectionInfo";
+import notebookImage from "../../../Assets/images/notebookImage.png";
 
 export function HomeFirstSection() {
   return (
@@ -13,7 +14,7 @@ export function HomeFirstSection() {
     >
       <SectionInfo />
       <Image
-        src="/src/Assets/images/notebookImage.png"
+        src={notebookImage}
         display={{ base: "none", lg: "inherit" }}
         maxH="462px"
         maxW="568px"
